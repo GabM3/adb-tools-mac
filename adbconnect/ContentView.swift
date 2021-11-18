@@ -89,7 +89,9 @@ struct DeviceActionsView: View {
             HStack(alignment: .top) {
                 Image("ScreenshotIcon").resizable().frame(width: 18.0, height: 18.0)
                 Text("Take screenshot")
-            }.contentShape(Rectangle())
+            }
+            .background(getBackgroundColor(isDoingOperation: statusMessaage == "Screenshot will be saved in Desktop"))
+            .contentShape(Rectangle())
                 .onTapGesture {
                     statusMessaage = "Screenshot will be saved in Desktop"
                     adb.takeScreenshot(deviceId: device.id)
@@ -99,7 +101,9 @@ struct DeviceActionsView: View {
             HStack(alignment: .top) {
                 Image("PasteIcon").resizable().frame(width: 18.0, height: 18.0)
                 Text("Copy screenshot in your clipboard")
-            }.contentShape(Rectangle())
+            }
+            .background(getBackgroundColor(isDoingOperation: statusMessaage == "Screenshot will be copied in your clipboard"))
+            .contentShape(Rectangle())
                 .onTapGesture {
                     statusMessaage = "Screenshot will be copied in your clipboard"
                     // Copying image data from paste board
@@ -110,7 +114,9 @@ struct DeviceActionsView: View {
             HStack(alignment: .top) {
                 Image("RecordIcon").resizable().frame(width: 18.0, height: 18.0)
                 Text(isRecordingScreen ? "Recording screen... Click to stop and save recording" : "Record screen")
-            }.contentShape(Rectangle())
+            }
+            .background(getBackgroundColor(isDoingOperation: isRecordingScreen))
+            .contentShape(Rectangle())
                 .onTapGesture {
                     if isRecordingScreen {
                         statusMessaage = "Recording will be saved in Desktop"
@@ -128,7 +134,9 @@ struct DeviceActionsView: View {
                 Image("SettingsIcon").resizable().frame(width: 18.0, height: 18.0)
                 Text(showAdvanced ? "Hide more options" : "Show more options")
                     .font(showAdvanced ? Font.body.bold() : Font.body)
-            }.contentShape(Rectangle())
+            }
+            .background(getBackgroundColor(isDoingOperation: showAdvanced))
+            .contentShape(Rectangle())
                 .onTapGesture {
                     showAdvanced = !showAdvanced
                 }
@@ -158,6 +166,18 @@ struct DeviceActionsView: View {
 
         }.padding(.bottom, 15)
     }
+    
+    func getBackgroundColor(isDoingOperation: Bool) -> Color {
+
+           var backgroundColor = Color.clear
+
+           if isDoingOperation {
+               backgroundColor = Color.red
+           }
+
+       return backgroundColor
+
+       }
 }
 
 struct NoDevicesView: View {
